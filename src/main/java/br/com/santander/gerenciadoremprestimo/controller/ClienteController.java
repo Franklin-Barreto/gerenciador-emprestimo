@@ -3,6 +3,8 @@ package br.com.santander.gerenciadoremprestimo.controller;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +31,10 @@ public class ClienteController {
 		Cliente cliente = clienteService.criar(clienteDto);
 		URI uri = UriComponentsBuilder.fromPath("clientes/{id}").buildAndExpand(cliente .getId()).toUri();
 		return ResponseEntity.created(uri ).body(cliente);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Cliente> buscarPorId(@PathVariable Integer id){
+		return ResponseEntity.ok(this.clienteService.obter(id));
 	}
 }

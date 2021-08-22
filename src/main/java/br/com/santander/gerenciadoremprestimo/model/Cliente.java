@@ -2,6 +2,7 @@ package br.com.santander.gerenciadoremprestimo.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,6 +54,10 @@ public class Cliente {
 
 	public String getCpf() {
 		return cpf;
+	}
+
+	public boolean passouExperiencia() {
+		return ChronoUnit.MONTHS.between(LocalDate.now(), dataContratacao) >= 3;
 	}
 
 }

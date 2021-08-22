@@ -23,7 +23,7 @@ public class PropostaService {
 
 	@Transactional
 	public Proposta criarProposta(PropostaInputDto propostaInput) {
-		Cliente cliente = clienteService.obterCliente(propostaInput.getClienteId());
+		Cliente cliente = clienteService.obter(propostaInput.getClienteId());
 		Proposta proposta = propostaInput.converte(cliente);
 		Proposta save = propostaRepository.save(proposta);
 		parcelaService.saveAll(proposta.getParcelas());

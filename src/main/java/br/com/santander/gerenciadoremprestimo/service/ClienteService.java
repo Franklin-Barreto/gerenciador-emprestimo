@@ -20,7 +20,7 @@ public class ClienteService {
 		return clienteRepository.save(cliente);
 	}
 
-	public Cliente obterCliente(Integer id) {
+	public Cliente obter(Integer id) {
 		return clienteRepository.getById(id);
 	}
 
