@@ -1,0 +1,1 @@
+INSERT INTO cliente VALUES (null,'12345678998','2020-05-25','João Alberto',100000,11000);

@@ -37,4 +37,6 @@ public class ClienteController {
 	public ResponseEntity<Cliente> buscarPorId(@PathVariable Integer id){
 		return ResponseEntity.ok(this.clienteService.obter(id));
 	}
+	
+	
 }
