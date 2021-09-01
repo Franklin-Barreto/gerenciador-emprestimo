@@ -1,6 +1,7 @@
 package br.com.santander.gerenciadoremprestimo.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,11 @@ public class ClienteController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Cliente> buscarPorId(@PathVariable Integer id){
 		return ResponseEntity.ok(this.clienteService.obter(id));
+	}
+	
+	@GetMapping("/buscartodos")
+	public List<Cliente> buscarTodos(){
+		return clienteService.buscarTodos();
 	}
 	
 	

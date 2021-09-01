@@ -1,5 +1,7 @@
 package br.com.santander.gerenciadoremprestimo.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import br.com.santander.gerenciadoremprestimo.model.Cliente;
@@ -22,6 +24,10 @@ public class ClienteService {
 
 	public Cliente obter(Integer id) {
 		return clienteRepository.getById(id);
+	}
+
+	public List<Cliente> buscarTodos() {
+		return clienteRepository.findAll();
 	}
 
 }

@@ -2,6 +2,8 @@ package br.com.santander.gerenciadoremprestimo.config;
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +27,10 @@ public class AutenticacaoService implements UserDetailsService {
 			return usuario.get();
 		}
 		throw new UsernameNotFoundException("usuario não encontrado");
+	}
+
+	public Usuario buscarPorId(Integer id) {
+		return usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
 	}
 
 }

@@ -3,39 +3,55 @@ package br.com.santander.gerenciadoremprestimo.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.com.santander.gerenciadoremprestimo.service.TokenService;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	AutenticacaoService userDetailService;
+	private AutenticacaoService userDetailService;
+	@Autowired 
+	private TokenService tokenService;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		/*auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance()).withUser("admin")
-				.password("1234").roles("USER");*/
 		auth.userDetailsService(userDetailService).passwordEncoder(encoder());
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic().
-		and().
-		csrf().disable().
-		authorizeRequests().
-		antMatchers(HttpMethod.GET,"/clientes/*","/usuarios/*").
+		http.headers().frameOptions().disable().and()
+		.authorizeRequests().
+		antMatchers(HttpMethod.GET,"/clientes/**","/usuarios/*").
 		permitAll().
-		antMatchers(HttpMethod.GET,"/usuarios/**").
+		antMatchers(HttpMethod.GET,"/usuarios/*").
+		permitAll().
+		antMatchers("/h2-console/**")
+		.permitAll().
+		antMatchers(HttpMethod.POST,"/auth/**").
 		permitAll().
 		anyRequest().
-		authenticated();
+		authenticated().and().csrf().disable()
+		.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		.addFilterBefore(new JwtTokenFilter(tokenService,userDetailService),
+		UsernamePasswordAuthenticationFilter.class);
+	}
+
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
 	}
 	
 	@Bean
